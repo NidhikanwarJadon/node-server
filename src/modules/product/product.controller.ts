@@ -1,0 +1,28 @@
+import { Request, Response } from "express";
+import { createProductService, getAllProductService } from "./product.service";
+
+export const createProductHandler = async (req: Request, res: Response) => {
+	try {
+		const data = await createProductService(req.body);
+		return res
+			.status(201)
+			.json({ data, messgae: "Product created successfully" });
+	} catch (err: any) {
+		return res
+			.status(500)
+			.json({ error: err.message || "Error creating product" });
+	}
+};
+
+export const productListingHandler = async (req: Request, res: Response) => {
+	try {
+		const data = await getAllProductService();
+		return res
+			.status(201)
+			.json({ data, message: "Product retrieved successfully" });
+	} catch (err: any) {
+		return res
+			.status(500)
+			.json({ error: err.message || "Error retrieving product" });
+	}
+};
