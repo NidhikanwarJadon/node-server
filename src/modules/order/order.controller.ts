@@ -6,6 +6,7 @@ import {
 } from "./order.service";
 import { OrderStatus } from "./order.model";
 import { Types } from "mongoose";
+import { sendEmail } from "../../services/emailService";
 
 export const createOrderHander = async (req: Request, res: Response) => {
 	try {
@@ -70,5 +71,19 @@ export const orderListingHandler = async (req: Request, res: Response) => {
 		return res
 			.status(500)
 			.json({ error: err.message || "Error retrieving order" });
+	}
+};
+
+export const testEmailController = async (req: Request, res: Response) => {
+	try {
+		await sendEmail(
+			"nidhi.kanwar+1@tntra.io",
+			"Test Email",
+			"Hello Nidhi, this is a test email",
+		);
+
+		res.status(200).json({ message: "Email sent successfully" });
+	} catch (error) {
+		res.status(500).json({ message: "Failed to send email" });
 	}
 };

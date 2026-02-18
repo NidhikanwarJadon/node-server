@@ -3,12 +3,14 @@ import {
 	changeOrderStatusHandler,
 	createOrderHander,
 	orderListingHandler,
+	testEmailController,
 } from "./order.controller";
 
 const orderRouter = Router();
 
+orderRouter.get("/test-email", testEmailController);
+orderRouter.get("/:userId", orderListingHandler);
 orderRouter.post("/:userId", createOrderHander);
 orderRouter.put("/:id", changeOrderStatusHandler);
-orderRouter.get("/:userId", orderListingHandler);
 
 export default orderRouter;
