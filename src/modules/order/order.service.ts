@@ -8,6 +8,7 @@ import {
 	updateOrderStatus,
 } from "./order.repository";
 import { getProductByIdRepo } from "../product/product.repository";
+import { sendEmail } from "../../services/emailService";
 
 export const createOrderService = async (
 	order: Partial<IOrder>,
@@ -72,11 +73,32 @@ export const updateOrderStatusService = async (
 		throw new Error("Order not found");
 	}
 
+	const oldStatus = order.status;
 	if (!allowedStatusTransitions[order.status].includes(status)) {
 		throw new Error(
 			`Cannot change order status from ${order.status} to ${status} `,
 		);
 	}
+
+	if (status === oldStatus) {
+		return order;
+	}
+
+	const user = await getUserByIdRepo(order.userId);
+	if (!user) {
+		throw new Error("User not found");
+	}
+
+	await sendEmail(
+		user.email,
+		"Order Status Updated",
+		`Hello,
+
+Your order ${order._id} status changed from ${oldStatus} to ${status}.
+
+Thank you.`,
+	);
+
 	return await updateOrderStatus(id, status);
 };
 
