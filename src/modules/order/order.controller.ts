@@ -8,7 +8,7 @@ import { OrderStatus } from "./order.model";
 import { Types } from "mongoose";
 import { sendEmail } from "../../services/emailService";
 
-export const createOrderHander = async (req: Request, res: Response) => {
+export const createOrder = async (req: Request, res: Response) => {
 	try {
 		const { userId } = req.params;
 
