@@ -2,6 +2,7 @@ import { Router } from "express";
 import { REQUEST_TYPES } from "./requestTypes";
 import * as userHandler from "../modules/user";
 import * as orderHandler from "../modules/order";
+import * as productHandler from "../modules/product";
 
 interface ApiMethod<T extends Document = Document> {
 	type: string;
@@ -40,7 +41,18 @@ export const customApiMapper: CustomApiMapper = {
 			},
 		],
 	},
-	products: { methods: [] },
+	product: {
+		methods: [
+			{
+				type: REQUEST_TYPES.CREATE,
+				handler: productHandler.createProductHandler,
+			},
+			{
+				type: REQUEST_TYPES.FETCH_ALL,
+				handler: productHandler.getAllProductsHandler,
+			},
+		],
+	},
 	order: {
 		methods: [
 			{

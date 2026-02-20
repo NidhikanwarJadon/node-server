@@ -1,4 +1,4 @@
-import mongoose, { Document, model, Schema } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
 export interface IProduct extends Document {
 	name: string;
@@ -17,4 +17,7 @@ const productSchema: Schema<IProduct> = new mongoose.Schema<IProduct>(
 	},
 );
 
-export const Product = model<IProduct>("Product", productSchema);
+const Product = mongoose.model<IProduct>("Product", productSchema);
+
+export const model = Product;
+export { Product, productSchema };

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { createProductService, getAllProductService } from "./product.service";
 
-export const createProductHandler = async (req: Request, res: Response) => {
+export const createProductController = async (req: Request, res: Response) => {
 	try {
 		const data = await createProductService(req.body);
 		return res
@@ -14,7 +14,7 @@ export const createProductHandler = async (req: Request, res: Response) => {
 	}
 };
 
-export const productListingHandler = async (req: Request, res: Response) => {
+export const productListingController = async (req: Request, res: Response) => {
 	try {
 		const data = await getAllProductService();
 		return res
