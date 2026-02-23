@@ -3,7 +3,8 @@ import fs from "fs";
 import path from "path";
 import { REQUEST_TYPES } from "./requestTypes";
 import { generateRequest } from "./generateRequest";
-import { customApiMapper } from "./customApiMapper";
+import { customApiMapper } from "../routes/customApiMapper";
+import { authRouter } from "../routes/authRouter";
 
 interface ApiGenerator {
 	generate(app: Application): void;
@@ -64,4 +65,5 @@ const apiService = new ApiService(path.join(__dirname, "../modules"));
 
 export default (app: Application): void => {
 	apiService.generate(app);
+	app.use("/auth", authRouter);
 };

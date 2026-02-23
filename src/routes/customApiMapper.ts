@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { REQUEST_TYPES } from "./requestTypes";
 import * as userHandler from "../modules/user";
 import * as orderHandler from "../modules/order";
 import * as productHandler from "../modules/product";
+import { REQUEST_TYPES } from "../core/requestTypes";
 
 interface ApiMethod<T extends Document = Document> {
 	type: string;
