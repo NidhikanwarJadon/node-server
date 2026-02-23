@@ -30,5 +30,17 @@ export const updateOrderStatusHandler = (router: Router) => {
 };
 
 export const getAllOrdersHandler = (router: Router) => {
-	router.get("/:userId", authenticateUser, orderController.orderListingHandler);
+	router.get(
+		"/user/:userId",
+		authenticateUser,
+		orderController.orderListingHandler,
+	);
+};
+
+export const testEmailHandler = (router: Router) => {
+	router.get(
+		"/test-email",
+		authenticateUser,
+		orderController.testEmailController,
+	);
 };

@@ -89,15 +89,12 @@ export const updateOrderStatusService = async (
 		throw new Error("User not found");
 	}
 
-	await sendEmail(
-		user.email,
-		"Order Status Updated",
-		`Hello,
-
-Your order ${order._id} status changed from ${oldStatus} to ${status}.
-
-Thank you.`,
-	);
+	await sendEmail(user.email, "Order Status Updated", "orderStatus", {
+		name: user.firstName,
+		orderId: order._id.toString(),
+		oldStatus: oldStatus,
+		currentStatus: status,
+	});
 
 	return await updateOrderStatus(id, status);
 };

@@ -67,6 +67,10 @@ export const customApiMapper: CustomApiMapper = {
 				type: REQUEST_TYPES.FETCH_ALL,
 				handler: orderHandler.getAllOrdersHandler,
 			},
+			{
+				type: REQUEST_TYPES.FETCH_ALL,
+				handler: orderHandler.testEmailHandler,
+			},
 		],
 	},
 };

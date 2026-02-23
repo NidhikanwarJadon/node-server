@@ -76,11 +76,9 @@ export const orderListingHandler = async (req: Request, res: Response) => {
 
 export const testEmailController = async (req: Request, res: Response) => {
 	try {
-		await sendEmail(
-			"nidhi.kanwar+1@tntra.io",
-			"Test Email",
-			"Hello Nidhi, this is a test email",
-		);
+		await sendEmail("nidhi.kanwar+1@tntra.io", "Test Email", "test", {
+			name: "Nidhi",
+		});
 
 		res.status(200).json({ message: "Email sent successfully" });
 	} catch (error) {
