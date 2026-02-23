@@ -6,10 +6,12 @@ import {
 	composeMiddlewares,
 	Middleware,
 } from "../../../utils/composeMiddleware";
+import { authenticateUser } from "../../middlewares/authMiddleware";
 
 export const createOrderHandler = (router: Router) => {
 	const middlewares = composeMiddlewares(
 		...(createValidationMiddlewares(orderValidator) as Middleware[]),
+		authenticateUser,
 	);
 
 	router.post(
@@ -20,9 +22,13 @@ export const createOrderHandler = (router: Router) => {
 };
 
 export const updateOrderStatusHandler = (router: Router) => {
-	router.put("/:id", orderController.changeOrderStatusHandler);
+	router.put(
+		"/:id",
+		authenticateUser,
+		orderController.changeOrderStatusHandler,
+	);
 };
 
 export const getAllOrdersHandler = (router: Router) => {
-	router.get("/:userId", orderController.orderListingHandler);
+	router.get("/:userId", authenticateUser, orderController.orderListingHandler);
 };

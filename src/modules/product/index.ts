@@ -6,10 +6,12 @@ import {
 import { createValidationMiddlewares } from "../../middlewares/validation";
 import { productValidator } from "./product.validator";
 import * as productController from "./product.controller";
+import { authenticateUser } from "../../middlewares/authMiddleware";
 
 export const createProductHandler = async (router: Router) => {
 	const middlewares = composeMiddlewares(
 		...(createValidationMiddlewares(productValidator) as Middleware[]),
+		authenticateUser,
 	);
 
 	router.post(
@@ -20,5 +22,5 @@ export const createProductHandler = async (router: Router) => {
 };
 
 export const getAllProductsHandler = async (router: Router) => {
-	router.get("/", productController.productListingController);
+	router.get("/", authenticateUser, productController.productListingController);
 };

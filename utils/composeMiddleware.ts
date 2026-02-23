@@ -1,6 +1,6 @@
-import { NextFunction } from "express";
+import { RequestHandler } from "express";
 
-export type Middleware = (req: Request, res: Response, next: NextFunction) => void;
+export type Middleware = RequestHandler;
 
 export const composeMiddlewares = (...middlewares: Middleware[]) =>
 	middlewares.flat();
