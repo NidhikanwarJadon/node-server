@@ -9,6 +9,8 @@ export interface IUser extends Document {
 	address?: string;
 	createdAt: Date;
 	updatedAt: Date;
+	resetPasswordToken?: string;
+	resetPasswordExpire?: Date;
 }
 
 const userSchema: Schema<IUser> = new mongoose.Schema(
@@ -19,6 +21,12 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
 		password: { type: String, required: true },
 		phoneNumber: { type: String, required: false },
 		address: { type: String, required: false },
+		resetPasswordToken: {
+			type: String,
+		},
+		resetPasswordExpire: {
+			type: Date,
+		},
 	},
 	{
 		timestamps: true,

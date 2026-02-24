@@ -36,3 +36,10 @@ export const updateUserRepo = async (id: any, data: any) => {
 export const deleteUserRepo = async (id: any) => {
 	return await User.findByIdAndDelete(id);
 };
+
+export const findUserByResetToken = async (hashedToken: string) => {
+	return await User.findOne({
+		resetPasswordToken: hashedToken,
+		resetPasswordExpire: { $gt: Date.now() },
+	});
+};
