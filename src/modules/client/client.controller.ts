@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createClientService } from "./client.service";
+import { bulkCreateClientService, createClientService } from "./client.service";
 
 export const createClientController = async (req: Request, res: Response) => {
 	try {
@@ -12,5 +12,20 @@ export const createClientController = async (req: Request, res: Response) => {
 		return res
 			.status(500)
 			.json({ error: err.message || "Failed to create client" });
+	}
+};
+
+export const bulkCreateClientController = async (
+	req: Request,
+	res: Response,
+) => {
+	try {
+		await bulkCreateClientService(req.file);
+
+		return res.status(201).json({ message: "Bulk client creation completed" });
+	} catch (err: any) {
+		return res
+			.status(500)
+			.json({ error: err.cause || err.message || "Bulk upload failed" });
 	}
 };

@@ -80,6 +80,10 @@ export const customApiMapper: CustomApiMapper = {
 				type: REQUEST_TYPES.CREATE,
 				handler: clientHandler.createClientHandler,
 			},
+			{
+				type: REQUEST_TYPES.CREATE,
+				handler: clientHandler.createBulkClientHandler,
+			},
 		],
 	},
 };
