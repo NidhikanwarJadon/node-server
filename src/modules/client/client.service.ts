@@ -1,10 +1,7 @@
 import { IOrganization } from "../organization/organization.model";
-import {
-	createOrganizationRepo,
-	findActiveOrganizationByEmail,
-	findActiveOrganizationByName,
-} from "../organization/organization.repo";
-import { createClientRepo } from "./client.repo";
+import * as organizationRepo from "../organization/organization.repo";
+import { createUserRepo } from "../user/user.repo";
+import * as clientRepo from "./client.repo";
 import * as XLSX from "xlsx";
 
 export const createClientService = async (data: Partial<IOrganization>) => {
@@ -15,20 +12,22 @@ export const createClientService = async (data: Partial<IOrganization>) => {
 	}
 
 	// Check active email
-	const existingByEmail = await findActiveOrganizationByEmail(email);
+	const existingByEmail =
+		await organizationRepo.findActiveOrganizationByEmail(email);
 	if (existingByEmail) {
 		throw new Error("Active client with this email already exists");
 	}
 
 	// Check active name
-	const existingByName = await findActiveOrganizationByName(name);
+	const existingByName =
+		await organizationRepo.findActiveOrganizationByName(name);
 	if (existingByName) {
 		throw new Error("Active client with this name already exists");
 	}
 
-	const organization = await createOrganizationRepo(data);
+	const organization = await organizationRepo.createOrganizationRepo(data);
 
-	return await createClientRepo({ organization: organization._id });
+	return await clientRepo.createClientRepo({ organization: organization._id });
 };
 
 export const bulkCreateClientService = async (file?: Express.Multer.File) => {
@@ -135,10 +134,12 @@ export const bulkCreateClientService = async (file?: Express.Multer.File) => {
 		parsedEmails.add(Email);
 
 		// Check active email
-		const existingByEmail = await findActiveOrganizationByEmail(Email);
+		const existingByEmail =
+			await organizationRepo.findActiveOrganizationByEmail(Email);
 
 		// Check active name
-		const existingByName = await findActiveOrganizationByName(Name);
+		const existingByName =
+			await organizationRepo.findActiveOrganizationByName(Name);
 
 		if (existingByEmail || existingByName) {
 			rowErrors.push({
@@ -179,4 +180,20 @@ export const bulkCreateClientService = async (file?: Express.Multer.File) => {
 		});
 		addedCount++;
 	}
+};
+
+export const getClients = async (page: number, limit: number) => {
+	const skip = (page - 1) * limit;
+
+	const [clients, total] = await Promise.all([
+		clientRepo.findClientsWithPagination(skip, limit),
+		await clientRepo.countClients(),
+	]);
+
+	return {
+		data: clients,
+		currentPage: page,
+		totalPages: Math.ceil(total / limit),
+		totalRecord: total,
+	};
 };
