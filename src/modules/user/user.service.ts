@@ -10,8 +10,19 @@ export const createUserService = async (data: any) => {
 	return await userRepo.createUserRepo(data);
 };
 
-export const getAllUsersService = async () => {
-	return await userRepo.getAllUsersRepo();
+export const getAllUsersService = async (page: number, limit: number) => {
+	const skip = (page - 1) * limit;
+
+	const [users, total] = await Promise.all([
+		userRepo.findUsersWithPagination(skip, limit),
+		await userRepo.countUsers(),
+	]);
+	return {
+		data: users,
+		currentPage: page,
+		totalPages: Math.ceil(total / limit),
+		totalRecord: total,
+	};
 };
 
 export const getUserByIdService = async (id: any) => {

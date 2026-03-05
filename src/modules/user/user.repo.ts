@@ -43,3 +43,11 @@ export const findUserByResetToken = async (hashedToken: string) => {
 		resetPasswordExpire: { $gt: Date.now() },
 	});
 };
+
+export const findUsersWithPagination = async (skip: number, limit: number) => {
+	return await User.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+};
+
+export const countUsers = async () => {
+	return await User.countDocuments();
+};

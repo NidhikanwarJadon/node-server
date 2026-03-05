@@ -16,7 +16,9 @@ export const createProductController = async (req: Request, res: Response) => {
 
 export const productListingController = async (req: Request, res: Response) => {
 	try {
-		const data = await getAllProductService();
+		const page = parseInt(req.query.page as string) || 1;
+		const limit = parseInt(req.query.limit as string) || 10;
+		const data = await getAllProductService(page, limit);
 		return res
 			.status(201)
 			.json({ data, message: "Product retrieved successfully" });

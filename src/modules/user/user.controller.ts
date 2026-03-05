@@ -22,7 +22,9 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const getAllUsers = async (req: Request, res: Response) => {
 	try {
-		const users = await userService.getAllUsersService();
+		const page = parseInt(req.query.page as string) || 1;
+		const limit = parseInt(req.query.limit as string) || 10;
+		const users = await userService.getAllUsersService(page, limit);
 		res
 			.status(200)
 			.json({ data: users, message: "Users fetched successfully" });

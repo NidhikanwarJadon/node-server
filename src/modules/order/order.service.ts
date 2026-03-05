@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import { getUserByIdRepo } from "../user/user.repo";
 import { IOrder, IOrderItem, OrderStatus } from "./order.model";
 import {
+	countOrders,
 	createOrderRepo,
 	findOrderById,
 	getAllOrders,
@@ -99,7 +100,21 @@ export const updateOrderStatusService = async (
 	return await updateOrderStatus(id, status);
 };
 
-export const getAllOrdersService = async (userId: Types.ObjectId) => {
+export const getAllOrdersService = async (
+	userId: Types.ObjectId,
+	page: number,
+	limit: number,
+) => {
 	await getUserByIdRepo(userId);
-	return await getAllOrders(userId);
+	const skip = (page - 1) * limit;
+	const [orders, total] = await Promise.all([
+		getAllOrders(userId, skip, limit),
+		await countOrders(userId),
+	]);
+	return {
+		orders,
+		currentPage: page,
+		totalPages: Math.ceil(total / limit),
+		totalRecord: total,
+	};
 };

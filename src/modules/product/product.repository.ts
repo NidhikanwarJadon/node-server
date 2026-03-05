@@ -11,6 +11,10 @@ export const getProductByIdRepo = async (id: Types.ObjectId) => {
 	return await Product.findById(id);
 };
 
-export const getAllProductsRepo = async () => {
-	return await Product.find();
+export const getAllProductsRepo = async (skip: number, limit: number) => {
+	return await Product.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+};
+
+export const countProducts = async () => {
+	return await Product.countDocuments();
 };

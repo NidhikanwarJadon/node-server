@@ -63,10 +63,16 @@ export const orderListingHandler = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "UserId not found" });
 		}
 
-		const data = await getAllOrdersService(userId as unknown as Types.ObjectId);
+		const page = parseInt(req.query.page as string) || 1;
+		const limit = parseInt(req.query.limit as string) || 10;
+		const data = await getAllOrdersService(
+			userId as unknown as Types.ObjectId,
+			page,
+			limit,
+		);
 		return res
 			.status(201)
-			.json({ data, message: "Orders retrieved successfully" });
+			.json({ ...data, message: "Orders retrieved successfully" });
 	} catch (err: any) {
 		return res
 			.status(500)
