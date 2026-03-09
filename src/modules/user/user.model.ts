@@ -15,6 +15,7 @@ export interface IUser extends Document {
 	phoneNumber?: string;
 	address?: string;
 	role: UserRole;
+	active?: boolean;
 	createdAt: Date;
 	updatedAt: Date;
 	resetPasswordToken?: string;
@@ -41,6 +42,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
 			],
 			default: "ADMIN",
 		},
+		active: { type: Boolean, default: true },
 		resetPasswordToken: {
 			type: String,
 		},

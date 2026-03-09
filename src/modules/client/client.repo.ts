@@ -35,14 +35,9 @@ export const addAssociateUser = async (
 	clientId: string,
 	userId: Types.ObjectId,
 ) => {
-	const client = await Client.findById(clientId);
-
-	if (!client) {
-		throw new Error("Client not found");
-	}
-	client?.associateUsers?.push(userId);
-
-	await client.save();
-
-	return client;
+	return Client.findByIdAndUpdate(
+		clientId,
+		{ $push: { associateUsers: userId } },
+		{ new: true },
+	);
 };

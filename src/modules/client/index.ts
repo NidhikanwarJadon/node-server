@@ -43,9 +43,18 @@ export const getClientListingHandler = (router: Router) => {
 
 export const createAssociateUserHandler = (router: Router) => {
 	router.post(
-		"/associate-user/:id",
+		"/:id/associate-user",
 		authenticateUser,
 		authenticateUserRole,
 		clientController.createAssociateUser,
+	);
+};
+
+export const updateAssociateUserHandler = (router: Router) => {
+	router.put(
+		"/:clientId/associate-user/:userId",
+		authenticateUser,
+		authenticateUserRole,
+		clientController.updateAssociateUser,
 	);
 };

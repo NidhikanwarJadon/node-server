@@ -93,6 +93,10 @@ export const customApiMapper: CustomApiMapper = {
 				type: REQUEST_TYPES.CREATE,
 				handler: clientHandler.createAssociateUserHandler,
 			},
+			{
+				type: REQUEST_TYPES.UPDATE,
+				handler: clientHandler.updateAssociateUserHandler,
+			},
 		],
 	},
 };

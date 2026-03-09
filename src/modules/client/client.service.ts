@@ -2,8 +2,11 @@ import { Types } from "mongoose";
 import { IOrganization } from "../organization/organization.model";
 import * as organizationRepo from "../organization/organization.repo";
 import { createUserService } from "../user/user.service";
+import crypto from "crypto";
 import * as clientRepo from "./client.repo";
 import * as XLSX from "xlsx";
+import { AssociateUserInput } from "./types";
+import { updateUserRepo } from "../user/user.repo";
 
 export const createClientService = async (data: Partial<IOrganization>) => {
 	const { name, email } = data;
@@ -203,7 +206,10 @@ export const updateClientService = async (id: string, data: any) => {
 	// return await clientRepo.updateClient(id, data);
 };
 
-export const createAssociateUserService = async (id: string, data: any) => {
+export const createAssociateUserService = async (
+	id: string,
+	data: AssociateUserInput,
+) => {
 	const client = await clientRepo.findClientById(id);
 
 	if (!client) {
@@ -214,8 +220,7 @@ export const createAssociateUserService = async (id: string, data: any) => {
 		throw new Error("Email and role are required");
 	}
 
-	const password = Math.random().toString(36).slice(-8);
-
+	const password = crypto.randomBytes(4).toString("hex");
 	const user = await createUserService({
 		firstName: name,
 		email,
@@ -232,5 +237,44 @@ export const createAssociateUserService = async (id: string, data: any) => {
 		email,
 		phone,
 		role,
+		active: user.active,
 	};
+};
+
+export const updateAssociateUserService = async (
+	clientId: string,
+	userId: string,
+	data: any,
+) => {
+	const client = await clientRepo.findClientById(clientId);
+	if (!client) {
+		throw new Error("Client not found");
+	}
+
+	// check user belongs to this client
+
+	const isAssociated = client.associateUsers?.some(
+		(id) => id.toString() === userId,
+	);
+
+	if (!isAssociated) {
+		throw new Error("User is not associated with this client");
+	}
+
+	// Restrict email and role update
+	if (data.email || data.role) {
+		throw new Error("Email and role cannot be updated");
+	}
+
+	const updateData: any = {};
+
+	if (data.name) {
+		updateData.firstName = data.name;
+	}
+
+	if (data.phone) {
+		updateData.phoneNumber = data.phone;
+	}
+	const updateUser = await updateUserRepo(userId, updateData);
+	return updateUser;
 };

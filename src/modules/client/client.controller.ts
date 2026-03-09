@@ -50,11 +50,15 @@ export const getClients = async (req: Request, res: Response) => {
 export const createAssociateUser = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
+		const { email, role } = req.body;
 
 		if (!id) {
 			return res.status(400).json({ message: "Client Id not found" });
 		}
 
+		if (!email || !role) {
+			return res.status(400).json({ message: "Email and role required" });
+		}
 		const result = await clientService.createAssociateUserService(
 			id as string,
 			req.body,
@@ -66,5 +70,31 @@ export const createAssociateUser = async (req: Request, res: Response) => {
 		return res
 			.status(500)
 			.json({ error: err.message || "Failed to create associate user" });
+	}
+};
+
+export const updateAssociateUser = async (req: Request, res: Response) => {
+	try {
+		const { clientId, userId } = req.params;
+
+		if (!clientId || !userId) {
+			return res
+				.status(400)
+				.json({ message: "ClientId and UserId are required" });
+		}
+
+		const result = await clientService.updateAssociateUserService(
+			clientId as string,
+			userId as string,
+			req.body,
+		);
+
+		return res
+			.status(200)
+			.json({ result, message: "Associate user updated successfully" });
+	} catch (err: any) {
+		return res.status(500).json({
+			error: err.message || "Failed to update associate user",
+		});
 	}
 };
