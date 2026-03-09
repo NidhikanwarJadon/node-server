@@ -46,3 +46,25 @@ export const getClients = async (req: Request, res: Response) => {
 			.json({ error: err.message || "Error fetching clients" });
 	}
 };
+
+export const createAssociateUser = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+
+		if (!id) {
+			return res.status(400).json({ message: "Client Id not found" });
+		}
+
+		const result = await clientService.createAssociateUserService(
+			id as string,
+			req.body,
+		);
+		return res
+			.status(201)
+			.json({ result, message: "Associate User created successfully" });
+	} catch (err: any) {
+		return res
+			.status(500)
+			.json({ error: err.message || "Failed to create associate user" });
+	}
+};

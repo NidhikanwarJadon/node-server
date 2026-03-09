@@ -9,7 +9,7 @@ export type UserRole =
 
 export interface IUser extends Document {
 	firstName: string;
-	lastName: string;
+	lastName?: string;
 	email: string;
 	password: string;
 	phoneNumber?: string;

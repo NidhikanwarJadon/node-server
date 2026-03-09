@@ -1,6 +1,8 @@
+import { Types } from "mongoose";
 import { IOrganization } from "../organization/organization.model";
 import * as organizationRepo from "../organization/organization.repo";
 import { createUserRepo } from "../user/user.repo";
+import { createUserService } from "../user/user.service";
 import * as clientRepo from "./client.repo";
 import * as XLSX from "xlsx";
 
@@ -196,4 +198,32 @@ export const getClients = async (page: number, limit: number) => {
 		totalPages: Math.ceil(total / limit),
 		totalRecord: total,
 	};
+};
+
+export const updateClientService = async (id: string, data: any) => {
+	// return await clientRepo.updateClient(id, data);
+};
+
+export const createAssociateUserService = async (id: string, data: any) => {
+	const client = await clientRepo.findClientById(id);
+
+	if (!client) {
+		throw new Error("Client not found");
+	}
+	const { name, email, phone, role } = data;
+	if (!email || !role) {
+		throw new Error("Email and role are required");
+	}
+
+	const password = Math.random().toString(36).slice(-8);
+
+	const user = await createUserService({
+		firstName: name,
+		email,
+		phoneNumber: phone,
+		password,
+		role,
+	});
+
+	return await clientRepo.addAssociateUser(id, user._id as Types.ObjectId);
 };

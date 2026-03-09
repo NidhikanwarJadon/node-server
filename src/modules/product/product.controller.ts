@@ -21,7 +21,7 @@ export const productListingController = async (req: Request, res: Response) => {
 		const data = await getAllProductService(page, limit);
 		return res
 			.status(201)
-			.json({ data, message: "Product retrieved successfully" });
+			.json({ ...data, message: "Product retrieved successfully" });
 	} catch (err: any) {
 		return res
 			.status(500)

@@ -40,3 +40,12 @@ export const getClientListingHandler = (router: Router) => {
 		clientController.getClients,
 	);
 };
+
+export const createAssociateUserHandler = (router: Router) => {
+	router.post(
+		"/associate-user/:id",
+		authenticateUser,
+		authenticateUserRole,
+		clientController.createAssociateUser,
+	);
+};
