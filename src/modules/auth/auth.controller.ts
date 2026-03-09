@@ -14,7 +14,7 @@ export const loginHandler = async (req: Request, res: Response) => {
 			httpOnly: true,
 			secure: false,
 			path: "/",
-			maxAge: 15 * 60 * 1000,
+			maxAge: 60 * 60 * 1000,
 		});
 
 		res

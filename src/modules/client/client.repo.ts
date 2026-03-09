@@ -43,5 +43,6 @@ export const addAssociateUser = async (
 	client?.associateUsers?.push(userId);
 
 	await client.save();
+
 	return client;
 };

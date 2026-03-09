@@ -1,7 +1,6 @@
 import { Types } from "mongoose";
 import { IOrganization } from "../organization/organization.model";
 import * as organizationRepo from "../organization/organization.repo";
-import { createUserRepo } from "../user/user.repo";
 import { createUserService } from "../user/user.service";
 import * as clientRepo from "./client.repo";
 import * as XLSX from "xlsx";
@@ -225,5 +224,13 @@ export const createAssociateUserService = async (id: string, data: any) => {
 		role,
 	});
 
-	return await clientRepo.addAssociateUser(id, user._id as Types.ObjectId);
+	await clientRepo.addAssociateUser(id, user._id as Types.ObjectId);
+
+	return {
+		_id: user._id,
+		name,
+		email,
+		phone,
+		role,
+	};
 };
