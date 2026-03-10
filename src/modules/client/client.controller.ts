@@ -98,3 +98,29 @@ export const updateAssociateUser = async (req: Request, res: Response) => {
 		});
 	}
 };
+
+export const getAllAssociateUser = async (req: Request, res: Response) => {
+	try {
+		const { clientId } = req.params;
+		if (!clientId) {
+			return res.status(400).json({ message: "Client not found" });
+		}
+
+		const page = parseInt(req.query.page as string) || 1;
+		const limit = parseInt(req.query.limit as string) || 10;
+
+		const result = await clientService.getAllAssociateUser(
+			clientId as string,
+			page,
+			limit,
+		);
+
+		return res
+			.status(200)
+			.json({ ...result, message: "Associated users retrived successfully" });
+	} catch (err: any) {
+		return res
+			.status(500)
+			.json({ error: err.message || "Error fetching associated users" });
+	}
+};

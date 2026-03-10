@@ -58,3 +58,12 @@ export const updateAssociateUserHandler = (router: Router) => {
 		clientController.updateAssociateUser,
 	);
 };
+
+export const getAllAssociateUserHandler = (router: Router) => {
+	router.get(
+		"/:clientId/associate-user",
+		authenticateUser,
+		authenticateUserRole,
+		clientController.getAllAssociateUser,
+	);
+};

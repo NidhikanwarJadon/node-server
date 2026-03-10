@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 import { Client, IClient } from "./client.model";
+import { User } from "../user/user.model";
 
 export const createClientRepo = async (clientData: Partial<IClient>) => {
 	return await Client.create(clientData);
@@ -40,4 +41,31 @@ export const addAssociateUser = async (
 		{ $push: { associateUsers: userId } },
 		{ new: true },
 	);
+};
+
+export const findClientAssociateUserIds = async (clientId: string) => {
+	const client = await Client.findById(clientId).select("associateUsers");
+	if (!client) {
+		throw new Error("Client not found");
+	}
+
+	return client.associateUsers;
+};
+
+export const findAssociateUsersWithPagination = async (
+	userIds: any[],
+	skip: number,
+	limit: number,
+) => {
+	return User.find({ _id: { $in: userIds } })
+		.select("firstName email phoneNumber role")
+		.sort({ createdAt: -1 })
+		.skip(skip)
+		.limit(limit);
+};
+
+export const countAssociateUsers = async (userIds: any[]) => {
+	return User.countDocuments({
+		_id: { $in: userIds },
+	});
 };

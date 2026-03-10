@@ -278,3 +278,27 @@ export const updateAssociateUserService = async (
 	const updateUser = await updateUserRepo(userId, updateData);
 	return updateUser;
 };
+
+export const getAllAssociateUser = async (
+	clientId: string,
+	page: number,
+	limit: number,
+) => {
+	const skip = (page - 1) * limit;
+
+	const userIds = (await clientRepo.findClientAssociateUserIds(clientId)) || [];
+	const users = await clientRepo.findAssociateUsersWithPagination(
+		userIds,
+		skip,
+		limit,
+	);
+
+	const total = await clientRepo.countAssociateUsers(userIds);
+
+	return {
+		data: users,
+		currentPage: page,
+		totalPages: Math.ceil(total / limit),
+		totalRecord: total,
+	};
+};
