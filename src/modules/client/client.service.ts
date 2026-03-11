@@ -302,3 +302,29 @@ export const getAllAssociateUser = async (
 		totalRecord: total,
 	};
 };
+
+export const updateAssociateUserActiveStatus = async (
+	clientId: string,
+	userId: string,
+	active: boolean,
+) => {
+	const client = await clientRepo.findClientById(clientId);
+
+	if (!client) {
+		throw new Error("Client not found");
+	}
+
+	// check user belongs to this client
+
+	const isAssociated = client.associateUsers?.some(
+		(id) => id.toString() === userId,
+	);
+
+	if (!isAssociated) {
+		throw new Error("User is not associated with this client");
+	}
+
+	const user = await updateUserRepo(userId, active);
+
+	return user;
+};

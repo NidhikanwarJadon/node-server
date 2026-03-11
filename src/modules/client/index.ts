@@ -67,3 +67,12 @@ export const getAllAssociateUserHandler = (router: Router) => {
 		clientController.getAllAssociateUser,
 	);
 };
+
+export const updateAssociateUserActiveStatusHandler = (router: Router) => {
+	router.put(
+		"/:clientId/associate-user-status/:userId",
+		authenticateUser,
+		authenticateUserRole,
+		clientController.updateAssociateUserActiveStatus,
+	);
+};

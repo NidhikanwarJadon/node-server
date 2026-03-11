@@ -124,3 +124,33 @@ export const getAllAssociateUser = async (req: Request, res: Response) => {
 			.json({ error: err.message || "Error fetching associated users" });
 	}
 };
+
+export const updateAssociateUserActiveStatus = async (
+	req: Request,
+	res: Response,
+) => {
+	try {
+		const { clientId, userId } = req.params;
+
+		if (!clientId || !userId) {
+			return res
+				.status(400)
+				.json({ message: "ClientId and UserId are required" });
+		}
+		
+		const result = await clientService.updateAssociateUserActiveStatus(
+			clientId as string,
+			userId as string,
+			req.body,
+		);
+
+
+		return res
+			.status(200)
+			.json({ result, message: "Associate user updated successfully" });
+	} catch (err: any) {
+		return res
+			.status(500)
+			.json({ error: err.message || "Failed to update associate user" });
+	}
+};

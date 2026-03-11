@@ -58,7 +58,7 @@ export const findAssociateUsersWithPagination = async (
 	limit: number,
 ) => {
 	return User.find({ _id: { $in: userIds } })
-		.select("firstName email phoneNumber role")
+		.select("firstName email phoneNumber role active")
 		.sort({ createdAt: -1 })
 		.skip(skip)
 		.limit(limit);
